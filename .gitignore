@@ -1,0 +1,7 @@
+# Generated
+*.iml
+/.idea
+/out
+# ImageData
+/resources
+/output

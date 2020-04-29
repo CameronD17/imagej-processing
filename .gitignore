@@ -1,7 +1,5 @@
 # Generated
 *.iml
+*.class
 /.idea
 /out
-# ImageData
-/resources
-/output

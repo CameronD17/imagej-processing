@@ -1,0 +1,6 @@
+# Ignore contents, but maintain directory and subdirectories themselves
+*
+!/density
+!/overall
+!/sections
+!.gitignore

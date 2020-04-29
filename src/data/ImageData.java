@@ -1,3 +1,5 @@
+package data;
+
 public class ImageData {
 
 	private final Double area;
@@ -46,5 +48,9 @@ public class ImageData {
 		public ImageData build() {
 			return new ImageData(this);
 		}
+	}
+
+	public String print() {
+		return "," + area + "," + particles + "," + density + "\n";
 	}
 }

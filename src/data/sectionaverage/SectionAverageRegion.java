@@ -1,6 +1,6 @@
-package data;
+package data.sectionaverage;
 
-public class Region {
+public class SectionAverageRegion {
 
 	private final String header;
 	private final Double s1Density;
@@ -9,44 +9,31 @@ public class Region {
 	private final Double s4Density;
 	private final Double average;
 
-	private Region( Builder builder ) {
+	private SectionAverageRegion( Builder builder ) {
 		this.header = builder.header;
 		this.s1Density = builder.s1Density;
 		this.s2Density = builder.s2Density;
 		this.s3Density = builder.s3Density;
 		this.s4Density = builder.s4Density;
-
-		// Nae need to average missing values
-		int count = 0;
-		if ( s1Density != 0.0 ) count++;
-		if ( s2Density != 0.0 ) count++;
-		if ( s3Density != 0.0 ) count++;
-		if ( s4Density != 0.0 ) count++;
-		this.average = count == 0 ? 0.0D : ( s1Density + s2Density + s3Density + s4Density ) / count;
+		this.average = calculateAverage();
 	}
 
 	public String getHeader() {
 		return header;
 	}
 
-	public Double getS1Density() {
-		return s1Density;
-	}
-
-	public Double getS2Density() {
-		return s2Density;
-	}
-
-	public Double getS3Density() {
-		return s3Density;
-	}
-
-	public Double getS4Density() {
-		return s4Density;
-	}
-
 	public Double getAverage() {
 		return average;
+	}
+
+	public Double calculateAverage() {
+		// Nae need to average missing values
+		int count = 0;
+		if ( s1Density != 0.0 ) count++;
+		if ( s2Density != 0.0 ) count++;
+		if ( s3Density != 0.0 ) count++;
+		if ( s4Density != 0.0 ) count++;
+		return count == 0 ? 0.0D : ( s1Density + s2Density + s3Density + s4Density ) / count;
 	}
 
 	public static class Builder
@@ -82,8 +69,8 @@ public class Region {
 			return this;
 		}
 
-		public Region build() {
-			return new Region(this);
+		public SectionAverageRegion build() {
+			return new SectionAverageRegion(this);
 		}
 	}
 

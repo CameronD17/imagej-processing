@@ -1,17 +1,16 @@
 import data.ProcessingPath;
-import processors.OverallAveragesProcessor;
 import processors.DensityProcessor;
+import processors.OverallAveragesProcessor;
 import processors.SectionAveragesProcessor;
 
 public class ImageJProcessing {
 
-	private static final DensityProcessor densityProcessor = new DensityProcessor();
-	private static final SectionAveragesProcessor sectionAveragesProcessor = new SectionAveragesProcessor();
-	private static final OverallAveragesProcessor overallAveragesProcessor = new OverallAveragesProcessor();
-
 	public static void main ( String[] args ) {
 
 		final ProcessingPath path = parseArgs(args);
+		final DensityProcessor densityProcessor = new DensityProcessor();
+		final SectionAveragesProcessor sectionAveragesProcessor = new SectionAveragesProcessor();
+		final OverallAveragesProcessor overallAveragesProcessor = new OverallAveragesProcessor();
 
 		System.out.println( "Processing " + path + " path." );
 
@@ -35,7 +34,7 @@ public class ImageJProcessing {
 			throw new IllegalArgumentException( String.format( "Exactly one numerical argument required! Found %s", args.length ) );
 		}
 
-		ProcessingPath processingPath;
+		final ProcessingPath processingPath;
 
 		try {
 			int path = Integer.parseInt( args[0] );

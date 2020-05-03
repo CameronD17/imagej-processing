@@ -1,12 +1,12 @@
-package data;
+package data.density;
 
-public class ImageData {
+public class DensityImageData {
 
 	private final Double area;
 	private final Long particles;
 	private final Double density;
 
-	private ImageData( Builder builder ) {
+	private DensityImageData( Builder builder ) {
 		this.area = builder.area;
 		this.particles = builder.particles;
 		this.density = builder.density;
@@ -45,8 +45,8 @@ public class ImageData {
 			return this;
 		}
 
-		public ImageData build() {
-			return new ImageData(this);
+		public DensityImageData build() {
+			return new DensityImageData(this);
 		}
 	}
 

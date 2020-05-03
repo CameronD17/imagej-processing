@@ -1,41 +1,26 @@
-package fileprocessor;
+package inputconverter;
 
 import static processors.DensityProcessor.PARTICLES_SUFFIX;
 import static processors.DensityProcessor.ROI_SUFFIX;
-import static processors.DensityProcessor.ROOT_FOLDER;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import helpers.FileReader;
 
 public class DensityFileProcessor {
 
-	private static final Pattern CSV_PATTERN = Pattern.compile(".*\\.csv");
+	private static final String ROOT_FOLDER = "resources/density/";
+	private static final Pattern INPUT_PATTERN = Pattern.compile(".*\\.csv");
 
-	public static List<String> getAllFileNames() {
-		try ( Stream<Path> walk = Files.walk( Paths.get( ROOT_FOLDER ) ) ) {
-			return walk.filter(Files::isRegularFile)
-					.map( Path::toString )
-					.filter( CSV_PATTERN.asPredicate() )
-					.collect( Collectors.toList());
-		} catch ( IOException e ) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
-	}
+	private final FileReader fileReader = new FileReader( ROOT_FOLDER, INPUT_PATTERN );
 
-	public static Set<String> getBareFileNames() {
-		return getAllFileNames().stream()
+	public Set<String> getBareFileNames() {
+		return fileReader.getFileNames().stream()
 				.map( s -> s.replaceAll( "^" + ROOT_FOLDER, "" )
 						.replaceAll( PARTICLES_SUFFIX + "$", "" )
 						.replaceAll( ROI_SUFFIX + "$", "" ) )
@@ -53,8 +38,8 @@ public class DensityFileProcessor {
 	 * 		the particles file to analyse
 	 * @return a list of particle counts
 	 */
-	public static List<Long> processParticlesFile( String filename ) {
-		List<String> fileLines = FileReader.readFileLines( filename );
+	public List<Long> processParticlesFile( String filename ) {
+		List<String> fileLines = fileReader.readFileLines( filename );
 
 		return fileLines.stream().skip(1) // Skip header row
 				.map( (line) -> Long.valueOf( line.split( "," )[1] ) ) // Extract 2nd column value
@@ -72,8 +57,8 @@ public class DensityFileProcessor {
 	 * 		the ROI file to analyse
 	 * @return a list of areas
 	 */
-	public static List<Double> processROIFile( String filename ) {
-		List<String> fileLines = FileReader.readFileLines( filename );
+	public List<Double> processROIFile( String filename ) {
+		List<String> fileLines = fileReader.readFileLines( filename );
 
 		Optional<String> row = fileLines.stream().skip(1).findFirst();
 		if ( row.isPresent() ) {
@@ -82,12 +67,20 @@ public class DensityFileProcessor {
 			int i = 1;
 			while ( i < cells.length ) {
 				inputList.add( Double.parseDouble( cells[i] ) );
-				i += 8; // Expected columns between 'Area' columns - TODO actually check the headers
+				i += 8; // Expected columns between 'Area' columns
 			}
 			return inputList;
 		} else {
 			System.out.println( String.format( "Missing row in file %s", filename ) );
 			return new ArrayList<>();
 		}
+	}
+
+	public boolean inputFilesHavePairs() {
+		Set<String> files = fileReader.getFileNames();
+		return files.stream()
+				.filter( f -> f.contains(".gitignore") )
+				.allMatch( s ->
+						files.contains( s + PARTICLES_SUFFIX ) && files.contains( s + ROI_SUFFIX ) );
 	}
 }

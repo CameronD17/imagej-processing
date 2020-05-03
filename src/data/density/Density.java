@@ -1,4 +1,4 @@
-package data;
+package data.density;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ public class Density {
 
 	private final String caption;
 	private final String headers;
-	private final List<ImageData> densityEntries;
+	private final List<DensityImageData> densityEntries;
 
 	private Density( Builder builder ) {
 		this.caption = builder.caption;
@@ -22,11 +22,11 @@ public class Density {
 		return headers;
 	}
 
-	public List<ImageData> getDensityEntries() {
+	public List<DensityImageData> getDensityEntries() {
 		return densityEntries;
 	}
 
-	public void addEntry( ImageData entry ) {
+	public void addEntry( DensityImageData entry ) {
 		densityEntries.add( entry );
 	}
 
@@ -34,7 +34,7 @@ public class Density {
 	{
 		private String caption;
 		private String headers;
-		private List<ImageData> densityEntries;
+		private List<DensityImageData> densityEntries;
 
 		public Builder caption( String caption ) {
 			this.caption = caption;
@@ -46,7 +46,7 @@ public class Density {
 			return this;
 		}
 
-		public Builder densityEntries( List<ImageData> densityEntries ) {
+		public Builder densityEntries( List<DensityImageData> densityEntries ) {
 			this.densityEntries = densityEntries;
 			return this;
 		}
@@ -59,7 +59,7 @@ public class Density {
 	public String print() {
 		StringBuilder printString = new StringBuilder();
 		printString.append( caption ).append( headers );
-		for ( ImageData data : densityEntries ) {
+		for ( DensityImageData data : densityEntries ) {
 			printString.append( data.print() );
 		}
 		return printString.append( "\n" ).toString();
